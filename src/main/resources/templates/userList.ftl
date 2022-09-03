@@ -1,5 +1,9 @@
 <#import "parts/common.ftl" as c>
 <@c.page>
+    <div>
+        <span><a href="/main"> Main Page</a> </span>
+    </div>
+
     List of users
 
     <table>
