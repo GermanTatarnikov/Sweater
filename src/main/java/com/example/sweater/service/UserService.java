@@ -3,29 +3,29 @@ package com.example.sweater.service;
 import com.example.sweater.domain.Role;
 import com.example.sweater.domain.User;
 import com.example.sweater.repos.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-    @Autowired
-    private UserRepo userRepo;
-
-    @Autowired
-    private MailSender mailSender;
+    private final UserRepo userRepo;
+    private final MailSender mailSender;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username);
     }
 
+    @Transactional
     public boolean addUser(User user) {
         User userFromDb = userRepo.findByUsername(user.getUsername());
 
@@ -52,6 +52,7 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    @Transactional
     public boolean activateUser(String code) {
         User user = userRepo.findByActivationCode(code);
 

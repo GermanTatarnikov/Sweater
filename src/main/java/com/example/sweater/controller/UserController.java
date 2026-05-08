@@ -3,7 +3,7 @@ package com.example.sweater.controller;
 import com.example.sweater.domain.Role;
 import com.example.sweater.domain.User;
 import com.example.sweater.repos.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/user")
 @PreAuthorize("hasAuthority('ADMIN')")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    UserRepo userRepo;
+    private final UserRepo userRepo;
 
     @GetMapping
     public String userList(Model model) {
@@ -47,7 +47,7 @@ public class UserController {
 
         user.getRoles().clear();
 
-        for(String key : form.keySet()) {
+        for (String key : form.keySet()) {
             if (roles.contains(key)) {
                 user.getRoles().add(Role.valueOf(key));
             }
