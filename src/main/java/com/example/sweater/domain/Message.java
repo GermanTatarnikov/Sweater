@@ -1,6 +1,7 @@
 package com.example.sweater.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,10 +9,11 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String text;
     private String tag;
@@ -22,13 +24,10 @@ public class Message {
 
     private String fileName;
 
-    public Message() {
-    }
-
-    public Message(String text, String tag, User user) {
+    public Message(String text, String tag, User author) {
         this.text = text;
         this.tag = tag;
-        this.author = user;
+        this.author = author;
     }
 
     public String getAuthorName() {

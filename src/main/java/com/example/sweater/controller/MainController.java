@@ -2,7 +2,7 @@ package com.example.sweater.controller;
 
 import com.example.sweater.domain.Message;
 import com.example.sweater.domain.User;
-import com.example.sweater.repos.MessageRepo;
+import com.example.sweater.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Controller
 @RequiredArgsConstructor
 public class MainController {
-    private final MessageRepo messageRepo;
+    private final MessageService messageService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -37,9 +37,9 @@ public class MainController {
         Iterable<Message> messages;
 
         if (filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
+            messages = messageService.findByTag(filter);
         } else {
-            messages = messageRepo.findAll();
+            messages = messageService.findAll();
         }
 
         model.addAttribute("messages", messages);
@@ -52,7 +52,8 @@ public class MainController {
     public String add(
             @AuthenticationPrincipal User user,
             @RequestParam String text,
-            @RequestParam String tag, Map<String, Object> model,
+            @RequestParam String tag,
+            Map<String, Object> model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         Message message = new Message(text, tag, user);
@@ -72,9 +73,9 @@ public class MainController {
             message.setFileName(resultFileName);
         }
 
-        messageRepo.save(message);
+        messageService.save(message);
 
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Message> messages = messageService.findAll();
 
         model.put("messages", messages);
 
