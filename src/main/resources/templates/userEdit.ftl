@@ -1,16 +1,24 @@
 <#import "parts/common.ftl" as c>
 <@c.page>
-    User editor
+    Редактирование пользователя
 
     <form action="/user" method="post">
-        <input type="text" name="username" value="${user.username}">
+        <div class="control-group">
+            <label>
+                <input type="text" class="form-control" name="username" value="${user.username}">
+            </label>
+        </div>
         <#list roles as role>
-            <div>
-                <label><input type="checkbox" name="${role}" ${user.roles?seq_contains(role)?string("checked", "")}>${role}</label>
+            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                <label>
+                    <input type="checkbox" class="btn-check" name="${role}" ${user.roles?seq_contains(role)?string("checked", "")}>${role}
+                </label>
             </div>
         </#list>
         <input type="hidden" value="${user.id}" name="userId">
         <input type="hidden" value="${_csrf.token}" name="_csrf">
-        <button type="submit">Save</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
     </form>
 </@c.page>

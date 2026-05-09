@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Map;
-
 @Controller
 @RequiredArgsConstructor
 public class RegistrationController {
@@ -22,9 +20,9 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, Map<String, Object> model) {
+    public String addUser(User user, Model model) {
         if (!userService.addUser(user)) {
-            model.put("message", "User exists");
+            model.addAttribute("message", "User exists");
             return "registration";
         }
 
