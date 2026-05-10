@@ -22,7 +22,6 @@ public class User implements UserDetails {
     private boolean active;
 
     private String email;
-
     private String activationCode;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

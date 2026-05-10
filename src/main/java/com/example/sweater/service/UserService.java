@@ -22,7 +22,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username);
+        return userRepo.findByUsername(username).get();
     }
 
     @Transactional(readOnly = true)
@@ -53,9 +53,9 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public boolean addUser(User user) {
-        User userFromDb = userRepo.findByUsername(user.getUsername());
+        Optional<User> userFromDb = userRepo.findByUsername(user.getUsername());
 
-        if (userFromDb != null) {
+        if (userFromDb.isPresent()) {
             return false;
         }
 
@@ -80,12 +80,13 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public boolean activateUser(String code) {
-        User user = userRepo.findByActivationCode(code);
+        Optional<User> userOpt = userRepo.findByActivationCode(code);
 
-        if (user == null) {
+        if (!userOpt.isPresent()) {
             return false;
         }
 
+        User user = userOpt.get();
         user.setActivationCode(null);
 
         userRepo.save(user);
