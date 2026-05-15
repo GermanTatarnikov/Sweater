@@ -29,6 +29,11 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>4.0.4</version>
+        </dependency>
 
         <!-- DataBase support -->
         <dependency>
@@ -40,6 +45,10 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.7</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
         </dependency>
 
         <!-- security -->
@@ -53,7 +62,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-
         <!-- devtools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

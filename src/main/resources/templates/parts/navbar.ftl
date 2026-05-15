@@ -17,9 +17,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/main">Сообщения</a>
                 </li>
-                <#if isAdmin>
+                <#if user??>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user">Список пользователей</a>
+                        <a class="nav-link" href="/user/profile">Профиль</a>
                     </li>
                 </#if>
             </ul>

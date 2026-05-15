@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> finAllUsers() {
+    public List<User> finAll() {
         return userRepo.findAll();
     }
 
@@ -65,15 +65,7 @@ public class UserService implements UserDetailsService {
 
         userRepo.save(user);
 
-        if (!StringUtils.isEmpty(user.getEmail())) {
-            String message = String.format(
-                    "Hello, %s! \n" +
-                            "Welcome to Sweater. Please, visit next link: http://localhost:8080/activate/%s",
-                    user.getUsername(), user.getActivationCode()
-            );
-
-            mailSender.send(user.getEmail(), "Activation Code", message);
-        }
+        sendActivationMessage(user);
 
         return true;
     }
@@ -92,5 +84,43 @@ public class UserService implements UserDetailsService {
         userRepo.save(user);
 
         return true;
+    }
+
+    @Transactional
+    public void updateProfile(User user, String password, String email) {
+        String userEmail = user.getEmail();
+
+        boolean isEmailChanged = ((email != null && !email.equals(userEmail)) ||
+                (userEmail != null && !userEmail.equals(email)));
+
+        if (isEmailChanged) {
+            user.setEmail(email);
+
+            if (!StringUtils.isEmpty(email)) {
+                user.setActivationCode(UUID.randomUUID().toString());
+            }
+        }
+
+        if (!StringUtils.isEmpty(password)) {
+            user.setPassword(password);
+        }
+
+        userRepo.save(user);
+
+        if (isEmailChanged) {
+            sendActivationMessage(user);
+        }
+    }
+
+    private void sendActivationMessage(User user) {
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Hello, %s! \n" +
+                            "Welcome to Sweater. Please, visit next link: http://localhost:8080/activate/%s",
+                    user.getUsername(), user.getActivationCode()
+            );
+
+            mailSender.send(user.getEmail(), "Activation Code", message);
+        }
     }
 }
