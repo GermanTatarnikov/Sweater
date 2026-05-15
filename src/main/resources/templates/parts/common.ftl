@@ -16,7 +16,7 @@
     <body>
     <#include "navbar.ftl">
     <div class="container mt-5">
-    <#nested>
+        <#nested>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

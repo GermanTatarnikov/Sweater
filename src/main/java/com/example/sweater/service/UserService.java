@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -19,10 +20,15 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final MailSender mailSender;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username).get();
+        Optional<User> userOpt = userRepo.findByUsername(username);
+        if (!userOpt.isPresent()) {
+            throw new UsernameNotFoundException("Пользователь не найден");
+        }
+        return userOpt.get();
     }
 
     @Transactional(readOnly = true)
@@ -62,6 +68,7 @@ public class UserService implements UserDetailsService {
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepo.save(user);
 
