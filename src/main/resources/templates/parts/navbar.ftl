@@ -12,18 +12,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/">Домой</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/main">Messages</a>
+                    <a class="nav-link" href="/main">Сообщения</a>
                 </li>
-                <#if isAdmin>
+                <#if user??>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user">User list</a>
+                        <a class="nav-link" href="/user/profile">Профиль</a>
                     </li>
                 </#if>
             </ul>
-
         </div>
 
         <div class="navbar-text mr-3">${name}</div>
